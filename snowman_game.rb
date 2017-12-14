@@ -66,6 +66,8 @@ def play_game
     check_guess(word, letter)
   end
 
+  puts "***********************************************************************"
+
   if has_won?(word)
     puts "You saved Frosty! Happy Birthday!"
   else
