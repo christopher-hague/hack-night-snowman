@@ -5,7 +5,7 @@ WORDS = ["apples", "dog", "hangman", "about", "greeting", "season", "winter", "u
 $incorrect_guesses = 0
 
 def check_guess(word, char)
-  if word.include?(char.downcase)
+  if word.include?(char.downcase) && AVAILABLE_LETTERS.include?(char.downcase)
     AVAILABLE_LETTERS.delete(char)
   else
     AVAILABLE_LETTERS.delete(char)
@@ -34,9 +34,12 @@ def display_word(word)
 end
 
 def display_snowman
+  # try using .read method (it won't return the file object). If read doesn't do it, there is a method that will
   File.open("snowman_image.txt").each_with_index do |line, index|
     puts line unless index > 20 - ($incorrect_guesses * 3)
   end
+  # returning nil prevents the <File> from being returned, which is what File.open will do by default
+  return nil
 end
 
 def play_game
@@ -44,7 +47,7 @@ def play_game
   puts "Welcome to Snowman!!!!"
   display_snowman
 
-  puts "Would you like to play random, or with a word of your choosing. Input 'random' for a random word, or enter the word you would like to play with."
+  puts "Would you like to play with a random word or with a word of your choosing? Input 'random' for a random word, or enter the word you would like to play with."
   user_word_choice = gets.chomp
   if user_word_choice.downcase == 'random'
     word = WORDS.sample
@@ -52,7 +55,7 @@ def play_game
     word = user_word_choice
   end
 
-  puts "Here is your first word. Save Frosty!!!"
+  puts "Here is your word. Save Frosty!!!"
   puts display_word(word)
 
   while !has_won?(word) && !has_lost?
